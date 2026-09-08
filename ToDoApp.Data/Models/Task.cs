@@ -10,5 +10,7 @@ namespace ToDoApp.Data.Models
         public string UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public User User { get; set; } = null!;
+        public int TaskCategoriesId { get; set; }
+        public Categories TaskCategories { get; set; } = null!;
     }
 }

@@ -9,11 +9,15 @@ namespace ToDoApp.Data.Context
         }
         public DbSet<Models.Task> Tasks { get; set; } = null!;
         public DbSet<Models.User> Users { get; set; } = null!;
+        public DbSet<Models.Categories> Categories { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Models.User>()
                 .HasKey(u => u.Id);
+
+            modelBuilder.Entity<Models.Categories>()
+                .HasKey(tc => tc.Id);
 
             modelBuilder.Entity<Models.Task>()
                 .HasKey(t => t.Id);
@@ -28,6 +32,21 @@ namespace ToDoApp.Data.Context
                 .WithMany(u => u.Tasks)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Models.Task>()
+                .HasOne(t => t.TaskCategories)
+                .WithMany(tc => tc.Tasks)
+                .HasForeignKey(t => t.TaskCategoriesId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Models.Categories>()
+                .HasData(
+                    new Models.Categories { Id = 1, Name = "Work" },
+                    new Models.Categories { Id = 2, Name = "Personal" },
+                    new Models.Categories { Id = 3, Name = "Shopping" },
+                    new Models.Categories { Id = 4, Name = "Health" },
+                    new Models.Categories { Id = 5, Name = "Finance" }
+                );
 
             base.OnModelCreating(modelBuilder);
         }
