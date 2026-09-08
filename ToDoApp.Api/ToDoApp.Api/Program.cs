@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using ToDoApp.Data.Context;
 
 namespace ToDoApp.Api
 {
@@ -12,6 +14,9 @@ namespace ToDoApp.Api
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<ToDoAppContext>(options =>
+                options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0))));
 
             var app = builder.Build();
 
