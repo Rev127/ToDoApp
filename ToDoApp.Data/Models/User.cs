@@ -4,6 +4,6 @@ namespace ToDoApp.Data.Models
 {
     public class User : IdentityUser
     {
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();
+        public ICollection<ToDoTask> Tasks { get; set; } = new List<ToDoTask>();
     }
 }
