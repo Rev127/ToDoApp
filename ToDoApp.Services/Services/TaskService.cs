@@ -42,7 +42,7 @@ namespace ToDoApp.Services.Services
 
         public async Task DeleteTaskAsync(int taskId)
         {
-            var task = await this.context.Tasks.FindAsync(taskId);
+            var task = await this.context.Tasks.Where(t => t.UserId == this.currentUserService.GetCurrentUserId() && t.Id == taskId).SingleOrDefaultAsync();
             if (task is null)
             {
                 throw new TaskNotFoundException($"Task with the ID {taskId} was not found");
@@ -53,7 +53,7 @@ namespace ToDoApp.Services.Services
 
         public async Task<List<GetTaskDto>> GetAllUserTasksAsync()
         {
-            var tasks = await this.context.Tasks.Where(t => t.UserId == "user-id").ToListAsync(); // Replace "user-id" with actual user ID
+            var tasks = await this.context.Tasks.Where(t => t.UserId == this.currentUserService.GetCurrentUserId()).ToListAsync();
             return tasks.Select(t => new GetTaskDto
             {
                 Id = t.Id,

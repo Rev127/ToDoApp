@@ -7,13 +7,13 @@ namespace ToDoApp.Services.Services
 {
     public class CurentUserService : ICurrentUserService
     {
-        private readonly HttpContext context;
+        private readonly IHttpContextAccessor context;
         private readonly string curentUserId;
 
-        public CurentUserService(HttpContext context)
+        public CurentUserService(IHttpContextAccessor context)
         {
             this.context = context;
-            this.curentUserId = this.context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            this.curentUserId = this.context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
         public string GetCurrentUserId()
         {
