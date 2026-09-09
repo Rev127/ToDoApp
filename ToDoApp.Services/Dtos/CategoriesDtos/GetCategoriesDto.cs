@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace ToDoApp.Services.Dtos.CategoriesDtos
 {
-    internal class GetCategoriesDto
+    public class GetCategoriesDto
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

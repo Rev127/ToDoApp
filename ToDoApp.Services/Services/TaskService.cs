@@ -11,11 +11,13 @@ namespace ToDoApp.Services.Services
     {
         private readonly ToDoAppContext context;
         private readonly ICategoriesService categoriesService;
+        private readonly ICurrentUserService currentUserService;
 
-        public TaskService(ToDoAppContext context, ICategoriesService categoriesService)
+        public TaskService(ToDoAppContext context, ICategoriesService categoriesService, ICurrentUserService currentUserService)
         {
             this.context = context;
             this.categoriesService = categoriesService;
+            this.currentUserService = currentUserService;
         }
 
         public async Task CreateTaskAsync(CreateTaskDto taskDto)
@@ -30,7 +32,7 @@ namespace ToDoApp.Services.Services
                 Name = taskDto.Title,
                 Description = taskDto.Description,
                 TaskCategoriesId = taskDto.CategoryId,
-                UserId = "user-id", // Replace with actual user ID
+                UserId = this.currentUserService.GetCurrentUserId(),
                 IsCompleted = false
             };
 
