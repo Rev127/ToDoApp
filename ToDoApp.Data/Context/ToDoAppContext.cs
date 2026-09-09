@@ -7,7 +7,7 @@ namespace ToDoApp.Data.Context
         public ToDoAppContext(DbContextOptions<ToDoAppContext> options) : base(options)
         {
         }
-        public DbSet<Models.Task> Tasks { get; set; } = null!;
+        public DbSet<Models.ToDoTask> Tasks { get; set; } = null!;
         public DbSet<Models.User> Users { get; set; } = null!;
         public DbSet<Models.Categories> Categories { get; set; } = null!;
 
@@ -19,21 +19,21 @@ namespace ToDoApp.Data.Context
             modelBuilder.Entity<Models.Categories>()
                 .HasKey(tc => tc.Id);
 
-            modelBuilder.Entity<Models.Task>()
+            modelBuilder.Entity<Models.ToDoTask>()
                 .HasKey(t => t.Id);
 
-            modelBuilder.Entity<Models.Task>()
+            modelBuilder.Entity<Models.ToDoTask>()
                 .Property(t => t.CreatedAt)
                 .IsRequired()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
-            modelBuilder.Entity<Models.Task>()
+            modelBuilder.Entity<Models.ToDoTask>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.Tasks)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Models.Task>()
+            modelBuilder.Entity<Models.ToDoTask>()
                 .HasOne(t => t.TaskCategories)
                 .WithMany(tc => tc.Tasks)
                 .HasForeignKey(t => t.TaskCategoriesId)

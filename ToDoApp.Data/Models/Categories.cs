@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToDoApp.Data.Models
+﻿namespace ToDoApp.Data.Models
 {
     public class Categories
     {

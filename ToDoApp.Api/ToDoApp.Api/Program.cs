@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Data.Context;
+using ToDoApp.Services.Interfaces;
+using ToDoApp.Services.Services;
+using ToDoApp.Data.Models;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace ToDoApp.Api
 {
@@ -15,8 +20,22 @@ namespace ToDoApp.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ToDoAppContext>()
+                .AddDefaultTokenProviders();
+
+            // Add authentication and authorization services.
+            builder.Services.AddAuthentication();
+            builder.Services.AddAuthorization();
+
             builder.Services.AddDbContext<ToDoAppContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0))));
+
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICurrentUserService, CurentUserService>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
+            builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 
@@ -30,6 +49,9 @@ namespace ToDoApp.Api
 
             app.UseAuthorization();
 
+            app.UseRouting();
+
+            
 
             app.MapControllers();
 
