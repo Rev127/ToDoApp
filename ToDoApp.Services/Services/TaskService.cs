@@ -42,7 +42,7 @@ namespace ToDoApp.Services.Services
 
         public async Task DeleteTaskAsync(int taskId)
         {
-            var task = await this.context.Tasks.FindAsync(taskId);
+            var task = await this.context.Tasks.Where(t => t.UserId == this.currentUserService.GetCurrentUserId() && t.Id == taskId).SingleOrDefaultAsync();
             if (task is null)
             {
                 throw new TaskNotFoundException($"Task with the ID {taskId} was not found");

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ToDoApp.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoryService;
@@ -15,16 +15,16 @@ namespace ToDoApp.Api.Controllers
             this.categoryService = categoryService;
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpGet]
+        [Authorize]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetCategories()
         {
             var categories = await categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpGet("{id}")]
+        [Authorize]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {
             var category = await categoryService.GetCategoriesByIdAsync(id);

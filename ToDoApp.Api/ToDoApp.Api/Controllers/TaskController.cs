@@ -16,33 +16,33 @@ namespace ToDoApp.Api.Controllers
             this.taskService = taskService;
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpGet]
+        [Authorize]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetTasks()
         {
             var tasks = await taskService.GetAllUserTasksAsync();
             return Ok(tasks);
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpPost]
-        public async Task<IActionResult> CreateTask(CreateTaskDto taskDto)
+        [Authorize]
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateTask([FromForm] CreateTaskDto taskDto)
         {
             await taskService.CreateTaskAsync(taskDto);
             return Ok();
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, UpdateTaskDto taskDto)
+        [Authorize]
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> UpdateTask(int id, [FromForm] UpdateTaskDto taskDto)
         {
             taskDto.Id = id;
             await taskService.UpdateTaskAsync(taskDto);
             return Ok();
         }
 
-        [Authorize(Roles = "Admin, User")]
-        [HttpDelete("{id}")]
+        [Authorize]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
             await taskService.DeleteTaskAsync(id);

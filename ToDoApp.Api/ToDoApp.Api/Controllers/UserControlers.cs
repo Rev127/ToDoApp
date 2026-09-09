@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ToDoApp.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UserControlers : Controller
     {
         private readonly IUserService userService;
@@ -14,16 +14,16 @@ namespace ToDoApp.Api.Controllers
             this.userService = userService;
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [Authorize]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await userService.GetAllUsersAsync();
             return Ok(users);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("{id}")]
+        [Authorize]
+        [HttpGet("get-by-id/{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
             var user = await userService.GetUserByIdAsync(id);
@@ -31,8 +31,8 @@ namespace ToDoApp.Api.Controllers
             return Ok(user);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("name/{name}")]
+        [Authorize]
+        [HttpGet("get-by-name/{name}")]
         public async Task<IActionResult> GetUserByName(string name)
         {
             var user = await userService.GetUserByNameAsync(name);
