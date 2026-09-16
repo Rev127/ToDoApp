@@ -4,7 +4,6 @@ using ToDoApp.Services.Interfaces;
 using ToDoApp.Services.Services;
 using ToDoApp.Data.Models;
 using ToDoApp.Api.Middlewares;
-using Microsoft.OpenApi;
 
 namespace ToDoApp.Api
 {
