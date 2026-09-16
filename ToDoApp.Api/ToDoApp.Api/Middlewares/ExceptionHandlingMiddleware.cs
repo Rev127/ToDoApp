@@ -3,10 +3,10 @@ using ToDoApp.Services.Exceptions;
 
 namespace ToDoApp.Api.Middlewares
 {
-    public class ExceptionHandling
+    public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate next;
-        public ExceptionHandling(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next)
         {
             this.next = next;
         }
