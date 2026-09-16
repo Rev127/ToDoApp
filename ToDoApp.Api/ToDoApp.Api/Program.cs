@@ -3,7 +3,7 @@ using ToDoApp.Data.Context;
 using ToDoApp.Services.Interfaces;
 using ToDoApp.Services.Services;
 using ToDoApp.Data.Models;
-using Microsoft.AspNetCore.Identity;
+using ToDoApp.Api.Middlewares;
 using Microsoft.OpenApi;
 
 
@@ -65,6 +65,8 @@ namespace ToDoApp.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
