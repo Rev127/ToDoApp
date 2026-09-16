@@ -6,7 +6,6 @@ using ToDoApp.Data.Models;
 using ToDoApp.Api.Middlewares;
 using Microsoft.OpenApi;
 
-
 namespace ToDoApp.Api
 {
     public class Program
@@ -21,32 +20,36 @@ namespace ToDoApp.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddSwaggerGen();
+
+            var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ToDoAngularApp", policy =>
+                {
+                    policy.WithOrigins(allowedOrigins)
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
+
             builder.Services.AddIdentityApiEndpoints<User>()
                 .AddEntityFrameworkStores<ToDoAppContext>();
 
-            builder.Services.AddSwaggerGen(options =>
+            builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "Bearer"
-                });
-
-                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-                {
-                    [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-                }); 
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            // Add authentication and authorization services.
-            builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
             builder.Services.AddDbContext<ToDoAppContext>(options =>
-                options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0))));
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0))));
 
             builder.Services.AddHttpContextAccessor();
 
@@ -69,6 +72,8 @@ namespace ToDoApp.Api
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseCors("ToDoAngularApp");
 
             app.UseAuthentication();
             app.UseAuthorization();

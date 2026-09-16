@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ToDoApp.Api.Controllers
 {
@@ -9,9 +10,11 @@ namespace ToDoApp.Api.Controllers
     public class UserControlers : Controller
     {
         private readonly IUserService userService;
-        public UserControlers(IUserService userService)
+        private readonly ICurrentUserService currentUserService;
+        public UserControlers(IUserService userService, ICurrentUserService currentUserService)
         {
             this.userService = userService;
+            this.currentUserService = currentUserService;
         }
 
         [Authorize]
@@ -37,6 +40,24 @@ namespace ToDoApp.Api.Controllers
         {
             var user = await userService.GetUserByNameAsync(name);
             return Ok(user);
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            return Ok(new
+            {
+                Name = this.currentUserService.GetCurrentUserName(),
+                IsAuthenticated = this.currentUserService.IsAuthenticated()
+            });
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            this.currentUserService.Logout();
+            return Ok();
         }
     }
 }

@@ -1,4 +1,8 @@
 <Solution>
+  <Project Path="../ToDoApp.Client/ToDoApp.Client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="../ToDoApp.Data/ToDoApp.Data.csproj" />
   <Project Path="../ToDoApp.Services/ToDoApp.Services.csproj" />
   <Project Path="ToDoApp.Api/ToDoApp.Api.csproj" />

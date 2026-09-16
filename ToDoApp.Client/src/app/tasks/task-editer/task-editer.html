@@ -1,0 +1,50 @@
+<div class="container py-5 my-5 border rounded shadow">
+  <h1 class="text-center mb-4">Edit Task</h1>
+  <form #form="ngForm" (submit)="editTask(form)">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        [(ngModel)]="task.title"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        [(ngModel)]="task.description"
+        required
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="categoryId" class="form-label">Category</label>
+      <select
+        class="form-select"
+        id="categoryId"
+        name="categoryId"
+        [(ngModel)]="task.categoryId"
+        required
+      >
+        @for (category of categories(); track category.id) {
+          <option [ngValue]="category.id">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <button type="submit" class="btn btn-primary btn-lg w-100">Edit Task</button>
+  </form>
+</div>
