@@ -1,0 +1,54 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+      <div class="card shadow border-0">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="text-center mb-4">Log in to your account</h2>
+
+          <p class="text-center text-muted mb-4">Log in to continue</p>
+          <form #form="ngForm" (ngSubmit)="loginUser(form)">
+            <div class="mb-3">
+              <label for="email" class="form-label"> Email </label>
+              <input
+                type="email"
+                name="email"
+                [(ngModel)]="authUser().email"
+                id="email"
+                class="form-control form-control-lg"
+                placeholder="name@example.com"
+                required
+                #emailRef="ngModel"
+              />
+              @if (isLoading() && emailRef.invalid) {
+                <div class="text-danger mt-1">Please enter a valid email address.</div>
+              }
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label"> Password </label>
+
+              <input
+                type="password"
+                name="password"
+                [(ngModel)]="authUser().password"
+                id="password"
+                class="form-control form-control-lg"
+                placeholder="Enter your password"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">Log in</button>
+          </form>
+          <div class="text-center mt-4">
+            <span class="text-muted"> Don't have an account? </span>
+
+            <a routerLink="/register" class="text-decoration-none ms-1"> Sign up </a>
+          </div>
+          @if (errorMessage()) {
+            <div class="alert alert-danger" role="alert">
+              {{ errorMessage() }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
