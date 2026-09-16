@@ -1,4 +1,5 @@
 ﻿using ToDoApp.Services.Dtos.TaskDtos;
+using ToDoApp.Services.Dtos.CategoriesDtos;
 using ToDoApp.Services.Interfaces;
 using ToDoApp.Data.Models;
 using ToDoApp.Data.Context;
@@ -53,21 +54,48 @@ namespace ToDoApp.Services.Services
 
         public async Task<List<GetTaskDto>> GetAllUserTasksAsync()
         {
-            var tasks = await this.context.Tasks.Where(t => t.UserId == this.currentUserService.GetCurrentUserId()).ToListAsync();
+            var tasks = await this.context.Tasks.Include(t => t.TaskCategories).Where(t => t.UserId == this.currentUserService.GetCurrentUserId()).ToListAsync();
             return tasks.Select(t => new GetTaskDto
             {
                 Id = t.Id,
                 Title = t.Name,
                 Description = t.Description,
-                CategoryId = t.TaskCategoriesId,
+                Category = new GetCategoriesDto
+                {
+                    Id = t.TaskCategories.Id,
+                    Name = t.TaskCategories.Name
+                },
                 UserId = t.UserId,
                 IsCompleted = t.IsCompleted
             }).ToList();
         }
 
+        public async Task<GetTaskDto> GetTaskByIdAsync(int taskId)
+        {
+            var task = await this.context.Tasks.Include(t => t.TaskCategories).Where(t => t.UserId == this.currentUserService.GetCurrentUserId() && t.Id == taskId).SingleOrDefaultAsync();
+            if (task is null)
+            {
+                throw new TaskNotFoundException($"Task with the ID {taskId} was not found");
+            }
+
+            return new GetTaskDto
+            {
+                Id = task.Id,
+                Title = task.Name,
+                Description = task.Description,
+                Category = new GetCategoriesDto
+                {
+                    Id = task.TaskCategories.Id,
+                    Name = task.TaskCategories.Name
+                },
+                UserId = task.UserId,
+                IsCompleted = task.IsCompleted
+            };
+        }
+
         public async Task UpdateTaskAsync(UpdateTaskDto taskDto)
         {
-           var task = await this.context.Tasks.FindAsync(taskDto.Id);
+            var task = await this.context.Tasks.FindAsync(taskDto.Id);
 
             if (task is null)
             {
