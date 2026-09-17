@@ -5,6 +5,6 @@
         string GetCurrentUserId();
         bool IsAuthenticated();
         string GetCurrentUserName();
-        void Logout();
+        Task Logout();
     }
 }

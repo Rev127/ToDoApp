@@ -33,7 +33,7 @@ namespace ToDoApp.Services.Services
             return this.context.HttpContext.User.Identity.Name;
         }
 
-        public async void Logout()
+        public async Task Logout()
         {
             await this.userManager.SignOutAsync();
         }
